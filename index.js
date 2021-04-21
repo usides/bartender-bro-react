@@ -13,15 +13,20 @@ window.data = {
 };
 
 function renderApp() {
-  getData(window.data.inputDrinkName)
-    .then(data => {
-      window.data.apiDrinks = data;
-      document.getElementById('app-root').innerHTML = App();
-    })
-    .catch(err => alert(err));
+  document.getElementById('app-root').innerHTML = App();
 }
 window.renderApp = renderApp;
 renderApp();
+
+function fetchAndRender() {
+  getData(window.data.inputDrinkName)
+    .then(data => {
+      window.data.apiDrinks = data;
+      renderApp();
+    })
+    .catch(err => alert(err));
+}
+window.fetchAndRender = fetchAndRender;
 
 function getData(value) {
   return new Promise((res, rej) => {
@@ -57,7 +62,7 @@ function controlBtns() {
         type="text"
         placeholder="Bro, what is ...?"
         value="${window.data.inputDrinkName}"
-        onchange="window.data.inputDrinkName = this.value; renderApp();"
+        onchange="window.data.inputDrinkName = this.value; fetchAndRender()"
       />
       <button
         class="talk-zone__request-random"
