@@ -34,7 +34,7 @@ function getData(value) {
       res(null);
     }
     const req = fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${value}`);
-    const data = req.then(res => res.json());
+    const data = req.then(res => res.json()).then(res => res.drinks);
     res(data);
   });
 }
@@ -42,7 +42,7 @@ function getData(value) {
 function setCurrentDrink({ target }) {
   const li = target.closest('li');
   if (!li) return;
-  const drink = window.data.apiDrinks.drinks.find(elem => elem.idDrink === li.dataset.id);
+  const drink = window.data.apiDrinks.find(elem => elem.idDrink === li.dataset.id);
   window.data.currentDrink = drink;
 }
 
@@ -74,8 +74,9 @@ function controlBtns() {
 
 function optionList(setCurrentDrinkCB) {
   let template = '';
-  if (window.data.apiDrinks && window.data.apiDrinks.drinks) {
-    const { drinks } = window.data.apiDrinks;
+  const drinks = window.data.apiDrinks;
+
+  if (drinks) {
     template = drinks
       .map(({ strDrink, idDrink }) => `<li data-id=${idDrink}>${strDrink}</li>`)
       .join('');
