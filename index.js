@@ -14,10 +14,7 @@ window.data = {
 
 function renderApp() {
   document.getElementById('app-root').innerHTML = App();
-  document.getElementById('list').addEventListener('click', function (evt) {
-    setCurrentDrink(evt);
-    renderApp();
-  });
+  document.getElementById('list').addEventListener('click', setCurrentDrink);
 }
 window.renderApp = renderApp;
 renderApp();
@@ -56,6 +53,7 @@ function setCurrentDrink({ target }) {
   if (!li) return;
   const drink = window.data.apiDrinks.find(elem => elem.idDrink === li.dataset.id);
   window.data.currentDrink = drink;
+  renderApp();
 }
 
 function App() {
@@ -85,7 +83,7 @@ function controlBtns() {
   `;
 }
 
-function optionList(setCurrentDrinkCB) {
+function optionList() {
   let template = '';
   const drinks = window.data.apiDrinks;
 
