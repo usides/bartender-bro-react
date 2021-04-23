@@ -14,6 +14,10 @@ window.data = {
 
 function renderApp() {
   document.getElementById('app-root').innerHTML = App();
+  document.getElementById('list').addEventListener('click', function (evt) {
+    setCurrentDrink(evt);
+    renderApp();
+  });
 }
 window.renderApp = renderApp;
 renderApp();
@@ -92,7 +96,7 @@ function optionList(setCurrentDrinkCB) {
   }
 
   return `
-    <ol id="list" class="chalk-brd__list" onclick="(${setCurrentDrinkCB})(event); renderApp();">
+    <ol id="list" class="chalk-brd__list">
       ${template}
     </ol>   
   `;
