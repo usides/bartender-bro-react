@@ -18,10 +18,11 @@ function renderApp() {
 window.renderApp = renderApp;
 renderApp();
 
-function fetchAndRender() {
-  getData(window.data.inputDrinkName)
+function fetchAndRender(value) {
+  getData(value)
     .then(data => {
       window.data.apiDrinks = data;
+      if (data) window.data.currentDrink = window.data.apiDrinks[0];
       renderApp();
     })
     .catch(err => alert(err));
@@ -30,10 +31,17 @@ window.fetchAndRender = fetchAndRender;
 
 function getData(value) {
   return new Promise((res, rej) => {
-    if (value === '' || !value.trim().length) {
-      res(null);
+    let url = '';
+    if (value === undefined) {
+      url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
+    } else {
+      url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${value}`;
+      if (value === '' || !value.trim().length) {
+        res(null);
+      }
     }
-    const req = fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${value}`);
+
+    const req = fetch(url);
     const data = req.then(res => res.json()).then(res => res.drinks);
     res(data);
   });
@@ -62,11 +70,12 @@ function controlBtns() {
         type="text"
         placeholder="Bro, what is ...?"
         value="${window.data.inputDrinkName}"
-        onchange="window.data.inputDrinkName = this.value; fetchAndRender()"
+        onchange="window.data.inputDrinkName = this.value; fetchAndRender(this.value)"
       />
       <button
         class="talk-zone__request-random"
         type="button"
+        onclick="fetchAndRender(); window.data.inputDrinkName=''"
         >Bro, give me anything that burns!!!</button>
     </div>    
   `;
@@ -76,7 +85,7 @@ function optionList(setCurrentDrinkCB) {
   let template = '';
   const drinks = window.data.apiDrinks;
 
-  if (drinks) {
+  if (drinks && drinks.length > 1) {
     template = drinks
       .map(({ strDrink, idDrink }) => `<li data-id=${idDrink}>${strDrink}</li>`)
       .join('');
@@ -92,17 +101,19 @@ function optionList(setCurrentDrinkCB) {
 function resultFields() {
   let template = '';
   const drink = window.data.currentDrink;
+
   if (drink) {
-    const ingredList = [];
-    const ingredMeasures = [];
-    for (let i = 1; i <= 15; i++) {
-      const ingrNo = `strIngredient${i}`;
-      const measureNo = `strMeasure${i}`;
-      if (drink[ingrNo]) {
-        ingredList.push(drink[ingrNo]);
-        ingredMeasures.push(drink[measureNo] ? drink[measureNo] : 'by eye');
-      }
-    }
+    const keys = Object.keys(drink);
+    const ingredients = keys
+      .filter(key => /strIngredient/.test(key))
+      .map(key => drink[key])
+      .filter(elem => elem);
+    const measures = keys
+      .filter(key => /strMeasure/.test(key))
+      .map(key => drink[key])
+      .slice(0, ingredients.length)
+      .map(elem => (elem === null ? 'by eye' : elem));
+
     template = `
   <h1 class="drink-descript__header">${drink.strDrink}</h1>
   <img
@@ -112,11 +123,11 @@ function resultFields() {
   />
   <div class="ingredients">
   <ul class="ingredients__list-name">
-    ${ingredList.map(elem => `<li class="ingredients__item">${elem}</li>`).join('')}
+    ${ingredients.map(elem => `<li class="ingredients__item">${elem}</li>`).join('')}
     
   </ul>
   <ul class="ingredients__list-qty">
-    ${ingredMeasures.map(elem => `<li class="ingredients__item">${elem}</li>`).join('')}
+    ${measures.map(elem => `<li class="ingredients__item">${elem}</li>`).join('')}
   </ul>
   
 </div>
