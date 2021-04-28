@@ -1,103 +1,180 @@
-// import styles from './main.css';
+import styles from './main.css';
 // import { debounce } from './helpers';
-// import { respondFromApi } from './respond';
 
 if (module.hot) {
   module.hot.accept();
 }
 
 window.data = {
-  inputDrinkName: '',
-  apiDrinks: null,
+  currentDrinkRequest: '',
+  loadedDrinkRequests: {},
   currentDrink: null,
+  error: null,
+  isDataLoading: false,
 };
+
+window.renderApp = renderApp;
+window.makeSearch = makeSearch;
+window.getLoadedDataByRequest = getLoadedDataByRequest;
+window.showRandomDrink = showRandomDrink;
 
 function renderApp() {
   document.getElementById('app-root').innerHTML = App();
-  document.getElementById('list').addEventListener('click', setCurrentDrink);
+  if (document.getElementById('list'))
+    document.getElementById('list').addEventListener('click', setCurrentDrink);
+  document.getElementById('searchInput').focus();
 }
-window.renderApp = renderApp;
-renderApp();
 
-function fetchAndRender(value) {
-  getData(value)
+function getData(input) {
+  const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${input}`;
+  if (input === '') {
+    const error = 'Please input correct data';
+    return Promise.resolve({ error });
+  }
+
+  if (!isCurrentDrinkRequestLoaded()) {
+    return fetch(url)
+      .then(res => res.json())
+      .then(data => data.drinks)
+      .then(data => ({ data }));
+  }
+
+  return Promise.resolve({});
+}
+
+function showRandomDrink() {
+  window.data.currentDrink = null;
+  const url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
+  const request = fetch(url)
+    .then(res => res.json())
+    .then(data => data.drinks);
+  request
     .then(data => {
-      window.data.apiDrinks = data;
-      if (data) window.data.currentDrink = window.data.apiDrinks[0];
-      renderApp();
+      window.data.loadedDrinkRequests.random = data;
+      window.data.currentDrinkRequest = 'random';
     })
-    .catch(err => alert(err));
+    .catch(err => (window.data.error = err))
+    .finally(() => {
+      window.renderApp();
+    });
 }
-window.fetchAndRender = fetchAndRender;
 
-function getData(value) {
-  return new Promise((res, rej) => {
-    let url = '';
-    if (value === undefined) {
-      url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
-    } else {
-      url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${value}`;
-      if (value === '' || !value.trim().length) {
-        res(null);
+function makeSearch(input) {
+  input = input.toLowerCase().trim();
+  window.data.currentDrinkRequest = input;
+  window.data.error = null;
+  window.data.isDataLoading = true;
+  window.data.currentDrink = null;
+
+  window.renderApp();
+
+  getData(input)
+    .then(({ data, error }) => {
+      window.data.isDataLoading = false;
+
+      if (error) {
+        window.data.error = error;
+      } else if (data || data === null) {
+        window.data.loadedDrinkRequests[input] = data;
       }
-    }
+    })
+    .catch(err => (window.data.error = err))
+    .finally(() => {
+      window.renderApp();
+    });
+}
 
-    const req = fetch(url);
-    const data = req.then(res => res.json()).then(res => res.drinks);
-    res(data);
-  });
+function isCurrentDrinkRequestLoaded() {
+  if (getLoadedDataByRequest() || getLoadedDataByRequest() === null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function getLoadedDataByRequest() {
+  const { currentDrinkRequest, loadedDrinkRequests } = window.data;
+  return loadedDrinkRequests[currentDrinkRequest];
 }
 
 function setCurrentDrink({ target }) {
+  const drinks = window.getLoadedDataByRequest();
   const li = target.closest('li');
   if (!li) return;
-  const drink = window.data.apiDrinks.find(elem => elem.idDrink === li.dataset.id);
+  const drink = drinks.find(elem => elem.idDrink === li.dataset.id);
   window.data.currentDrink = drink;
-  renderApp();
+  window.renderApp();
 }
 
 function App() {
   return `
-  ${controlBtns()}
-  ${optionList(setCurrentDrink)}
-  ${resultFields()}
+  ${ControlBtns()}
+  ${Results()}
   `;
 }
 
-function controlBtns() {
+function Results() {
+  let content = '';
+
+  if (window.data.isDataLoading) return (content = `<p>Data is loading...</p>`);
+
+  if (window.data.error) return (content = `<p>${window.data.error}</p>`);
+
+  // if (window.data.currentDrinkRequest === '')
+  //   return (content = `<p>Please type drink name or press the button</p>`);
+
+  content = `<div>
+     ${optionList()}
+     ${resultFields()}
+  </div>`;
+
+  return content;
+}
+
+function ControlBtns() {
   return `
     <div class="talk-zone">
       <input
+        id="searchInput"
         class="talk-zone__request"
         type="text"
         placeholder="Bro, what is ...?"
-        value="${window.data.inputDrinkName}"
-        onchange="window.data.inputDrinkName = this.value; fetchAndRender(this.value)"
-      />
+        value="${
+          window.data.currentDrinkRequest === 'random' ? '' : window.data.currentDrinkRequest
+        }"
+        onchange="makeSearch(this.value)"
+        onfocus="this.setSelectionRange(this.value.length,this.value.length)"
+         />
       <button
         class="talk-zone__request-random"
         type="button"
-        onclick="fetchAndRender(); window.data.inputDrinkName=''"
+        onclick="showRandomDrink();"
         >Bro, give me anything that burns!!!</button>
     </div>    
   `;
 }
 
 function optionList() {
-  let template = '';
-  const drinks = window.data.apiDrinks;
+  const drinks = window.getLoadedDataByRequest();
+  let content = '';
+
+  if (drinks === null) content = '<p>Nothing found</p>';
 
   if (drinks && drinks.length > 1) {
-    template = drinks
+    const liItems = drinks
       .map(({ strDrink, idDrink }) => `<li data-id=${idDrink}>${strDrink}</li>`)
       .join('');
+
+    content = `
+      <ol id="list" class="chalk-brd__list" >
+        ${liItems}
+      </ol>     `;
+    //onclick="(${setCurrentDrink})(event)"
   }
 
-  return `
-    <ol id="list" class="chalk-brd__list">
-      ${template}
-    </ol>   
-  `;
+  if (drinks && window.data.currentDrink === null) window.data.currentDrink = drinks[0];
+
+  return content;
 }
 
 function resultFields() {
@@ -123,13 +200,13 @@ function resultFields() {
     src="${drink.strDrinkThumb}/preview"
     alt="drink-img"
   />
-  <div class="ingredients">
-  <ul class="ingredients__list-name">
-    ${ingredients.map(elem => `<li class="ingredients__item">${elem}</li>`).join('')}
+  <div class="${styles.ingredients}">
+  <ul class="${styles.ingredients__list_name}">
+    ${ingredients.map(elem => `<li class="${styles.ingredients__item}">${elem}</li>`).join('')}
     
   </ul>
-  <ul class="ingredients__list-qty">
-    ${measures.map(elem => `<li class="ingredients__item">${elem}</li>`).join('')}
+  <ul class="${styles.ingredients__list_qty}">
+    ${measures.map(elem => `<li class="${styles.ingredients__item}">${elem}</li>`).join('')}
   </ul>
   
 </div>
@@ -143,3 +220,5 @@ function resultFields() {
   </div>  
   `;
 }
+
+renderApp();
