@@ -1,3 +1,7 @@
+/** @jsx createElement */
+/** @jsxFrag createFragment */
+import { createElement, createFragment } from '../framework/element';
+
 import styles from '../../main.css';
 
 export default function ResultFields() {
@@ -16,30 +20,26 @@ export default function ResultFields() {
       .slice(0, ingredients.length)
       .map(elem => (elem === null ? 'by eye' : elem));
 
-    template = `
-  <h1 class="drink-descript__header">${drink.strDrink}</h1>
-  <img
-    class="drink-descript__img"
-    src="${drink.strDrinkThumb}/preview"
-    alt="drink-img"
-  />
-  <div class="${styles.ingredients}">
-  <ul class="${styles.ingredients__list_name}">
-    ${ingredients.map(elem => `<li class="${styles.ingredients__item}">${elem}</li>`).join('')}
-    
-  </ul>
-  <ul class="${styles.ingredients__list_qty}">
-    ${measures.map(elem => `<li class="${styles.ingredients__item}">${elem}</li>`).join('')}
-  </ul>
-  
-</div>
-<p class="drink-descript__receipt">${drink.strInstructions}</p>
-  `;
+    template = (
+      <>
+        <h1>{drink.strDrink}</h1>
+        <img src={`${drink.strDrinkThumb}/preview`} alt="drink-img" />
+        <div class={styles.ingredients}>
+          <ul class={styles.ingredients__list_name}>
+            {ingredients.map(elem => (
+              <li class={styles.ingredients__item}>{elem}</li>
+            ))}
+          </ul>
+          <ul class={styles.ingredients__list_qty}>
+            {measures.map(elem => (
+              <li class={styles.ingredients__item}>{elem}</li>
+            ))}
+          </ul>
+        </div>
+        <p>{drink.strInstructions}</p>
+      </>
+    );
   }
 
-  return `
-  <div class="drink-descript__wrapper">
-    ${template}
-  </div>  
-  `;
+  return <div>{template}</div>;
 }

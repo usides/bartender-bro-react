@@ -1,17 +1,17 @@
 {
-  "name": "bartenderbro",
+  "name": "BartenderBro based on Kottans frontend-2021-framework",
   "version": "1.2",
   "description": "",
   "main": "src/index.html",
   "scripts": {
-    "start": "parcel src/index.html",
-    "lint:js": "npx eslint --cache **/*.js",
+    "start": "parcel ./src/index.html",
+    "lint:js": "npx eslint --cache .",
     "lint:js:fix": "npm run lint:js -- --fix",
-    "prettify": "npx prettier --write **/*.{js,css,md,html}",
+    "prettify": "npx prettier --write \"**/*.{js,css,md,html}\"",
     "lint": "npm run lint:js:fix && npm run prettify",
     "lint:staged": "npx lint-staged",
     "prebuild": "shx rm -rf dist/*",
-    "build": "parcel build src/index.html --public-url ./",
+    "build": "parcel build ./src/index.html --public-url ./",
     "deploy": "gh-pages -d dist"
   },
   "repository": {
@@ -45,16 +45,6 @@
     "shx": "^0.3.3"
   },
   "babel": {
-    "plugins": [
-      [
-        "@babel/plugin-transform-react-jsx",
-        {
-          "pragma": "createElement",
-          "pragmaFRag": "createFragment",
-          "throwIfNamespace": "true"
-        }
-      ]
-    ],
     "presets": [
       [
         "env",
@@ -66,16 +56,10 @@
       ]
     ]
   },
-  "browserslist": [
-    "since 2021-01"
-  ],
+  "browserslist": ["since 2021-01"],
   "pre-commit": "lint:staged",
   "lint-staged": {
-    "**/*.{js,jsx}": [
-      "eslint --cache --fix"
-    ],
-    "**/*.{js,css,md,html}": [
-      "prettier --write"
-    ]
+    "**/*.{js,jsx}": ["eslint --cache --fix"],
+    "**/*.{js,css,md,html}": ["prettier --write"]
   }
 }

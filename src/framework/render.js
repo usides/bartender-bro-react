@@ -1,12 +1,13 @@
-import { setCurrentDrink } from '../data/cocktailData';
+/** @jsx createElement */
+/** @jsxFrag createFragment */
+import { createElement, createFragment } from '../framework/element';
 
 let Component, Target;
 
-export default function renderApp(componentFunction, targetElementId) {
+export default function renderApp(componentFunction = null, targetElement = null) {
   if (componentFunction) Component = componentFunction;
-  if (targetElementId) Target = targetElementId;
-  document.getElementById(Target).innerHTML = Component();
-  if (document.getElementById('list'))
-    document.getElementById('list').addEventListener('click', setCurrentDrink);
+  if (targetElement) Target = targetElement;
+  Target.innerHTML = '';
+  Target.appendChild(<Component />);
   document.getElementById('searchInput').focus();
 }

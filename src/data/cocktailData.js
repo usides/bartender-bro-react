@@ -1,10 +1,12 @@
+import renderApp from '../framework/render';
+
 export function setCurrentDrink({ target }) {
   const drinks = getLoadedDataByRequest();
   const li = target.closest('li');
   if (!li) return;
   const drink = drinks.find(elem => elem.idDrink === li.dataset.id);
   window.data.currentDrink = drink;
-  window.renderApp();
+  renderApp();
 }
 
 export function getLoadedDataByRequest() {
@@ -50,7 +52,7 @@ export function showRandomDrink() {
     })
     .catch(err => (window.data.error = err))
     .finally(() => {
-      window.renderApp();
+      renderApp();
     });
 }
 
@@ -61,7 +63,7 @@ export function makeSearch(input) {
   window.data.isDataLoading = true;
   window.data.currentDrink = null;
 
-  window.renderApp();
+  renderApp();
 
   getData(input)
     .then(({ data, error }) => {
@@ -75,6 +77,6 @@ export function makeSearch(input) {
     })
     .catch(err => (window.data.error = err))
     .finally(() => {
-      window.renderApp();
+      renderApp();
     });
 }
