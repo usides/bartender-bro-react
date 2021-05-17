@@ -1,7 +1,8 @@
 import styles from '../../main.css';
+import { getLoadedDataByRequest } from '../data/cocktailData';
 
 export default function OptionList() {
-  const drinks = window.getLoadedDataByRequest();
+  const drinks = getLoadedDataByRequest();
   let content = '';
 
   if (drinks === null) content = '<p>Nothing found</p>';

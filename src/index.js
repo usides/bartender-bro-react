@@ -1,6 +1,7 @@
 import renderApp from './framework/render';
-import { makeSearch, getLoadedDataByRequest, showRandomDrink } from './data/cocktailData';
+import { makeSearch, showRandomDrink } from './data/cocktailData';
 import data from './data/data';
+import App from './components/App';
 
 import styles from '../main.css';
 // import { debounce } from './helpers';
@@ -12,7 +13,6 @@ window.data = data;
 
 window.renderApp = renderApp;
 window.makeSearch = makeSearch;
-window.getLoadedDataByRequest = getLoadedDataByRequest;
 window.showRandomDrink = showRandomDrink;
 
-renderApp();
+renderApp(App, 'app-root');

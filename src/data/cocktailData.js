@@ -1,5 +1,5 @@
 export function setCurrentDrink({ target }) {
-  const drinks = window.getLoadedDataByRequest();
+  const drinks = getLoadedDataByRequest();
   const li = target.closest('li');
   if (!li) return;
   const drink = drinks.find(elem => elem.idDrink === li.dataset.id);
