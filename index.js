@@ -162,11 +162,15 @@ function optionList() {
 
   if (drinks && drinks.length > 1) {
     const liItems = drinks
-      .map(({ strDrink, idDrink }) => `<li data-id=${idDrink}>${strDrink}</li>`)
+      .map(
+        ({ strDrink, idDrink }) =>
+          `<li class="${styles.option_item}" data-id=${idDrink}>${strDrink}</li>`,
+      )
       .join('');
 
     content = `
-      <ol id="list" class="chalk-brd__list" >
+      <p>I found these options:</p>
+      <ol id="list" class="${styles.option_list}" >
         ${liItems}
       </ol>     `;
     //onclick="(${setCurrentDrink})(event)"
