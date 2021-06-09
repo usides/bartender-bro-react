@@ -1,22 +1,20 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
-import { makeSearch, showRandomDrink } from '../data/cocktailData';
+import { createElement } from '../framework';
+// import { makeSearch, showRandomDrink } from '../data/cocktailData';
 
-export default function ControlButtons() {
+export default function ControlButtons({ value, handleChange }) {
   return (
     <div className="talk-zone">
       <input
         id="searchInput"
         type="text"
         placeholder="Bro, what is ...?"
-        value={window.data.currentDrinkRequest === 'random' ? '' : window.data.currentDrinkRequest}
-        onChange={e => makeSearch(e.target.value)}
-        onFocus={e => e.target.setSelectionRange(e.target.value.length, e.target.value.length)}
+        value={value === 'random' ? '' : value}
+        onChange={handleChange}
+        // onFocus={e => e.target.setSelectionRange(e.target.value.length, e.target.value.length)}
       />
-      <button type="button" onClick={showRandomDrink}>
-        Bro, give me anything that burns!!!
-      </button>
+      <button type="button">Bro, give me anything that burns!!!</button>
     </div>
   );
 }

@@ -1,4 +1,21 @@
-import renderApp from '../framework/render';
+const dataStorage = {};
+
+export function loadDrinkData(currentDrink) {
+  const currentDrinkData = dataStorage[currentDrink];
+
+  if (currentDrinkData) return currentDrinkData;
+
+  const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${currentDrink}`;
+
+  return fetch(url).then(response => {
+    if (!response.ok) {
+      throw Error(response.status);
+    }
+    const result = response.json();
+    dataStorage[currentDrink] = result;
+    return result;
+  });
+}
 
 export function setCurrentDrink({ target }) {
   const drinks = getLoadedDataByRequest();
