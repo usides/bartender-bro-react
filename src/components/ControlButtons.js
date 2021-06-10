@@ -1,22 +1,12 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement } from '../framework';
-// import { loadRandomData } from '../data/cocktailData';
+import React from 'react';
 
-export default function ControlButtons({
-  value,
-  setCurrentDrink,
-  setSelectedDrink,
-  setCurrentDrinkData,
-}) {
+export default function ControlButtons({ value, setCurrentDrink, setSelectedDrink }) {
   const handleChange = ({ target: { value } }) => {
     setCurrentDrink(value);
     setSelectedDrink(null);
-    setCurrentDrinkData('');
   };
 
   const handleClick = () => {
-    // loadRandomData().then(setCurrentDrinkData);
     setCurrentDrink(`random${Math.floor(Math.random() * 10000)}`);
   };
 
@@ -28,7 +18,6 @@ export default function ControlButtons({
         placeholder="Bro, what is ...?"
         value={/^random/.test(value) ? '' : value}
         onChange={handleChange}
-        onFocus={e => e.target.setSelectionRange(e.target.value.length, e.target.value.length)}
       />
       <button type="button" onClick={handleClick}>
         Bro, give me anything that burns!!!

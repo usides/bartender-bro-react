@@ -1,14 +1,12 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement, createFragment, useState, useEffect } from '../framework';
-import { loadDrinkData, loadRandomData } from '../data/cocktailData';
+import React, { useState, useEffect } from 'react';
+import { loadDrinkData } from '../data/cocktailData';
 
 import ControlButtons from './ControlButtons';
 import Results from './Results';
 
 export default function App() {
   const [currentDrink, setCurrentDrink] = useState('');
-  const [currentDrinkData, setCurrentDrinkData] = useState('');
+  const [currentDrinkData, setCurrentDrinkData] = useState([]);
   const [error, setError] = useState(null);
   const [selectedDrink, setSelectedDrink] = useState(null);
 
@@ -36,7 +34,6 @@ export default function App() {
         setCurrentDrink={setCurrentDrink}
         value={currentDrink}
         setSelectedDrink={setSelectedDrink}
-        setCurrentDrinkData={setCurrentDrinkData}
       />
       <Results
         error={error}

@@ -1,16 +1,11 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-
-import styles from '../../main.css';
-
-import { createElement, createFragment } from '../framework';
+import React from 'react';
 
 export default function OptionList({ currentDrinkData, setSelectedDrink }) {
   const drinks = currentDrinkData;
 
   if (drinks && drinks.length > 1) {
     const liItems = drinks.map(({ strDrink, idDrink }) => (
-      <li class={styles.option_item} data-id={idDrink}>
+      <li key={idDrink} className="option_item" data-id={idDrink}>
         {strDrink}
       </li>
     ));
@@ -25,10 +20,12 @@ export default function OptionList({ currentDrinkData, setSelectedDrink }) {
     return (
       <>
         <p>We found these options:</p>
-        <ol id="list" onClick={handleClick} class={styles.option_list}>
+        <ol id="list" onClick={handleClick} className="option_list">
           {liItems}
         </ol>
       </>
     );
   }
+
+  return null;
 }

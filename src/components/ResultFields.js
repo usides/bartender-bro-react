@@ -1,8 +1,4 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement } from '../framework';
-
-import styles from '../../main.css';
+import React from 'react';
 
 export default function ResultFields({ selectedDrink }) {
   const drink = selectedDrink;
@@ -23,15 +19,19 @@ export default function ResultFields({ selectedDrink }) {
       <div>
         <h1>{drink.strDrink}</h1>
         <img src={`${drink.strDrinkThumb}/preview`} alt="drink-img" />
-        <div class={styles.ingredients}>
-          <ul class={styles.ingredients__list_name}>
-            {ingredients.map(elem => (
-              <li class={styles.ingredients__item}>{elem}</li>
+        <div className="ingredients">
+          <ul className="ingredients__list_name">
+            {ingredients.map((elem, index) => (
+              <li key={index} className="ingredients__item">
+                {elem}
+              </li>
             ))}
           </ul>
-          <ul class={styles.ingredients__list_qty}>
-            {measures.map(elem => (
-              <li class={styles.ingredients__item}>{elem}</li>
+          <ul className="ingredients__list_qty">
+            {measures.map((elem, index) => (
+              <li key={index} className="ingredients__item">
+                {elem}
+              </li>
             ))}
           </ul>
         </div>
@@ -39,4 +39,6 @@ export default function ResultFields({ selectedDrink }) {
       </div>
     );
   }
+
+  return null;
 }

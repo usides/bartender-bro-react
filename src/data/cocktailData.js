@@ -23,11 +23,3 @@ export function loadDrinkData(currentDrink) {
     return result;
   });
 }
-
-export function loadRandomData() {
-  const url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
-  const data = fetch(url)
-    .then(res => res.json())
-    .then(data => data.drinks);
-  return data;
-}
