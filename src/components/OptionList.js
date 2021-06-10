@@ -1,16 +1,12 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
-import { setCurrentDrink } from '../data/cocktailData';
 
 import styles from '../../main.css';
-import { getLoadedDataByRequest } from '../data/cocktailData';
 
-export default function OptionList() {
-  const drinks = getLoadedDataByRequest();
-  let content = '';
+import { createElement, createFragment } from '../framework';
 
-  if (drinks === null) content = <p>Nothing found</p>;
+export default function OptionList({ currentDrinkData, setSelectedDrink }) {
+  const drinks = currentDrinkData;
 
   if (drinks && drinks.length > 1) {
     const liItems = drinks.map(({ strDrink, idDrink }) => (
@@ -19,17 +15,20 @@ export default function OptionList() {
       </li>
     ));
 
-    content = (
+    const handleClick = ({ target }) => {
+      const li = target.closest('li');
+      if (!li) return;
+      const drink = drinks.find(elem => elem.idDrink === li.dataset.id);
+      setSelectedDrink(drink);
+    };
+
+    return (
       <>
-        <p>I found these options:</p>
-        <ol id="list" onClick={setCurrentDrink} class={styles.option_list}>
+        <p>We found these options:</p>
+        <ol id="list" onClick={handleClick} class={styles.option_list}>
           {liItems}
         </ol>
       </>
     );
   }
-
-  if (drinks && window.data.currentDrink === null) window.data.currentDrink = drinks[0];
-
-  return content;
 }

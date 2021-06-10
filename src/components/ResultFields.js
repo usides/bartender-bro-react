@@ -1,12 +1,11 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
+import { createElement } from '../framework';
 
 import styles from '../../main.css';
 
-export default function ResultFields() {
-  let template = '';
-  const drink = window.data.currentDrink;
+export default function ResultFields({ selectedDrink }) {
+  const drink = selectedDrink;
 
   if (drink) {
     const keys = Object.keys(drink);
@@ -20,8 +19,8 @@ export default function ResultFields() {
       .slice(0, ingredients.length)
       .map(elem => (elem === null ? 'by eye' : elem));
 
-    template = (
-      <>
+    return (
+      <div>
         <h1>{drink.strDrink}</h1>
         <img src={`${drink.strDrinkThumb}/preview`} alt="drink-img" />
         <div class={styles.ingredients}>
@@ -37,9 +36,7 @@ export default function ResultFields() {
           </ul>
         </div>
         <p>{drink.strInstructions}</p>
-      </>
+      </div>
     );
   }
-
-  return <div>{template}</div>;
 }

@@ -1,15 +1,16 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
 import { createElement, createFragment, useState, useEffect } from '../framework';
-import { loadDrinkData } from '../data/cocktailData';
+import { loadDrinkData, loadRandomData } from '../data/cocktailData';
 
 import ControlButtons from './ControlButtons';
 import Results from './Results';
 
 export default function App() {
   const [currentDrink, setCurrentDrink] = useState('');
-  const [currentDrinkData, setCurrentDrinkData] = useState(null);
+  const [currentDrinkData, setCurrentDrinkData] = useState('');
   const [error, setError] = useState(null);
+  const [selectedDrink, setSelectedDrink] = useState(null);
 
   useEffect(() => {
     if (currentDrink) {
@@ -23,12 +24,27 @@ export default function App() {
     }
   }, [currentDrink]);
 
-  const handleChange = ({ target: { value } }) => setCurrentDrink(value);
+  useEffect(() => {
+    if (currentDrinkData) {
+      setSelectedDrink(currentDrinkData[0]);
+    }
+  }, [currentDrinkData]);
 
   return (
     <>
-      <ControlButtons handleChange={handleChange} value={currentDrink} />
-      <Results error={error} currentDrinkData={currentDrinkData} currentDrink={currentDrink} />
+      <ControlButtons
+        setCurrentDrink={setCurrentDrink}
+        value={currentDrink}
+        setSelectedDrink={setSelectedDrink}
+        setCurrentDrinkData={setCurrentDrinkData}
+      />
+      <Results
+        error={error}
+        currentDrinkData={currentDrinkData}
+        currentDrink={currentDrink}
+        selectedDrink={selectedDrink}
+        setSelectedDrink={setSelectedDrink}
+      />
     </>
   );
 }
