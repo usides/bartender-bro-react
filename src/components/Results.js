@@ -3,8 +3,8 @@ import { useAppContext } from '../context';
 import OptionList from './OptionList';
 import ResultFields from './ResultFields';
 
-export default function Results({ error, currentDrink }) {
-  const drinks = useAppContext();
+export default function Results({ error }) {
+  const { currentDrinkData: drinks, currentDrink } = useAppContext();
 
   const [selectedDrink, setSelectedDrink] = useState(null);
 

@@ -1,6 +1,9 @@
 import React from 'react';
+import { useAppContext } from '../context';
 
-export default function ControlButtons({ currentDrink, setCurrentDrink }) {
+export default function ControlButtons({ setCurrentDrink }) {
+  const { currentDrink } = useAppContext();
+
   const handleChange = ({ target: { value } }) => {
     setCurrentDrink(value);
   };

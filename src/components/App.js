@@ -23,9 +23,9 @@ export default function App() {
 
   return (
     <>
-      <ControlButtons setCurrentDrink={setCurrentDrink} currentDrink={currentDrink} />
-      <AppContext.Provider value={currentDrinkData}>
-        <Results error={error} currentDrink={currentDrink} />
+      <AppContext.Provider value={{ currentDrinkData, currentDrink }}>
+        <ControlButtons setCurrentDrink={setCurrentDrink} />
+        <Results error={error} />
       </AppContext.Provider>
     </>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAppContext } from '../context';
 
-export default function OptionList({ currentDrinkData, setSelectedDrink }) {
-  const drinks = useAppContext();
+export default function OptionList({ setSelectedDrink }) {
+  const { currentDrinkData: drinks } = useAppContext();
 
   if (drinks && drinks.length > 1) {
     const liItems = drinks.map(({ strDrink, idDrink }) => (
