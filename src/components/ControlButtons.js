@@ -1,9 +1,8 @@
 import React from 'react';
 
-export default function ControlButtons({ value, setCurrentDrink, setSelectedDrink }) {
+export default function ControlButtons({ currentDrink, setCurrentDrink }) {
   const handleChange = ({ target: { value } }) => {
     setCurrentDrink(value);
-    setSelectedDrink(null);
   };
 
   const handleClick = () => {
@@ -16,7 +15,7 @@ export default function ControlButtons({ value, setCurrentDrink, setSelectedDrin
         id="searchInput"
         type="text"
         placeholder="Bro, what is ...?"
-        value={/^random/.test(value) ? '' : value}
+        value={/^random/.test(currentDrink) ? '' : currentDrink}
         onChange={handleChange}
       />
       <button type="button" onClick={handleClick}>
