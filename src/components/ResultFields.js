@@ -1,6 +1,9 @@
 import React from 'react';
+import { useAppContext } from '../context';
 
 export default function ResultFields({ selectedDrink }) {
+  const { setIngredient } = useAppContext();
+
   const drink = selectedDrink;
 
   if (drink) {
@@ -15,12 +18,18 @@ export default function ResultFields({ selectedDrink }) {
       .slice(0, ingredients.length)
       .map(elem => (elem === null ? 'by eye' : elem));
 
+    const handleClick = ({ target }) => {
+      const li = target.closest('li');
+      if (!li) return;
+      setIngredient(li.textContent);
+    };
+
     return (
       <div>
         <h1>{drink.strDrink}</h1>
         <img src={`${drink.strDrinkThumb}/preview`} alt="drink-img" />
         <div className="ingredients">
-          <ul className="ingredients__list_name">
+          <ul onClick={handleClick} className="ingredients__list_name">
             {ingredients.map((elem, index) => (
               <li key={index} className="ingredients__item">
                 {elem}
