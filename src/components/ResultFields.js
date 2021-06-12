@@ -25,18 +25,22 @@ export default function ResultFields({ selectedDrink }) {
     };
 
     return (
-      <div>
-        <h1>{drink.strDrink}</h1>
-        <img src={`${drink.strDrinkThumb}/preview`} alt="drink-img" />
+      <div className="result-fields">
+        <p className="result-fields__name">{drink.strDrink}</p>
+        <img
+          className="result-fields__image"
+          src={`${drink.strDrinkThumb}/preview`}
+          alt="drink-img"
+        />
         <div className="ingredients">
-          <ul onClick={handleClick} className="ingredients__list_name">
+          <ul onClick={handleClick} className="ingredients__list-name">
             {ingredients.map((elem, index) => (
-              <li key={index} className="ingredients__item">
+              <li key={index} className={`ingredients__item ingredients__item__selectable`}>
                 {elem}
               </li>
             ))}
           </ul>
-          <ul className="ingredients__list_qty">
+          <ul className="ingredients__list-qty">
             {measures.map((elem, index) => (
               <li key={index} className="ingredients__item">
                 {elem}
@@ -44,7 +48,7 @@ export default function ResultFields({ selectedDrink }) {
             ))}
           </ul>
         </div>
-        <p>{drink.strInstructions}</p>
+        <p className="result-fields__instruction">{drink.strInstructions}</p>
       </div>
     );
   }

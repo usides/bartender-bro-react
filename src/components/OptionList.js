@@ -6,7 +6,7 @@ export default function OptionList({ setSelectedDrink }) {
 
   if (drinks && drinks.length > 1) {
     const liItems = drinks.map(({ strDrink, idDrink }) => (
-      <li key={idDrink} className="option_item" data-id={idDrink}>
+      <li key={idDrink} className="option-list__item" data-id={idDrink}>
         {strDrink}
       </li>
     ));
@@ -19,12 +19,12 @@ export default function OptionList({ setSelectedDrink }) {
     };
 
     return (
-      <>
-        <p>We found these options:</p>
-        <ol id="list" onClick={handleClick} className="option_list">
+      <div className="option-list">
+        <p className="option-list__info">We found these options:</p>
+        <ol className="option-list__list" onClick={handleClick}>
           {liItems}
         </ol>
-      </>
+      </div>
     );
   }
 

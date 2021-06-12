@@ -13,15 +13,16 @@ export default function ControlButtons({ setCurrentDrink }) {
   };
 
   return (
-    <div className="talk-zone">
+    <div className="controls">
       <input
-        id="searchInput"
+        className="controls__input"
         type="text"
         placeholder="Bro, what is ...?"
         value={/^random/.test(currentDrink) ? '' : currentDrink}
         onChange={handleChange}
+        spellCheck="false"
       />
-      <button type="button" onClick={handleClick}>
+      <button className="controls__button" type="button" onClick={handleClick}>
         Bro, give me anything that burns!!!
       </button>
     </div>

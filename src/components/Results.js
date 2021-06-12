@@ -14,14 +14,15 @@ export default function Results({ error }) {
     }
   }, [drinks]);
 
-  if (error) return <p>{`Ops! ${error}`}</p>;
+  if (error) return <p className="message">{`Ops! ${error}`}</p>;
 
-  if (currentDrink === '') return <p>Please type drink name or press the button</p>;
+  if (currentDrink === '')
+    return <p className="message">Please type drink name or press the button</p>;
 
-  if (drinks === null) return <p>Nothing found</p>;
+  if (drinks === null) return <p className="message">Nothing found</p>;
 
   return (
-    <div>
+    <div className="results">
       <OptionList setSelectedDrink={setSelectedDrink} />
       <ResultFields selectedDrink={selectedDrink} />
     </div>

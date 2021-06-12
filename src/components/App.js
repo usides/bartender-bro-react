@@ -39,12 +39,13 @@ export default function App() {
   }, [ingredient]);
 
   return (
-    <>
+    <div className="app">
+      <h1 className="app__heading">BartenderBro</h1>
       <AppContext.Provider value={{ currentDrinkData, currentDrink, setIngredient }}>
         <ControlButtons setCurrentDrink={setCurrentDrink} />
         <Results error={error} />
         {ingredient && <IngredientInfo ingredient={ingredient} ingredientData={ingredientData} />}
       </AppContext.Provider>
-    </>
+    </div>
   );
 }
