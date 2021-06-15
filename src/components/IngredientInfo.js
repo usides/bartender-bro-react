@@ -13,7 +13,7 @@ export default function IngredientInfo({ ingredient, ingredientData }) {
         alt="Ingredient Picture"
       />
       <p className="ingredient-info__data">
-        {ingredientData.strDescription ?? 'No text description'}
+        {ingredientData.strDescription || 'No text description'}
       </p>
     </div>
   );
