@@ -4,29 +4,27 @@ import { useAppContext } from '../context';
 export default function OptionList({ setSelectedDrink }) {
   const { currentDrinkData: drinks } = useAppContext();
 
-  if (drinks && drinks.length > 1) {
-    const liItems = drinks.map(({ strDrink, idDrink }) => (
-      <li key={idDrink} className="option-list__item" data-id={idDrink}>
-        {strDrink}
-      </li>
-    ));
+  if (drinks.length <= 1) return null;
 
-    const handleClick = ({ target }) => {
-      const li = target.closest('li');
-      if (!li) return;
-      const drink = drinks.find(elem => elem.idDrink === li.dataset.id);
-      setSelectedDrink(drink);
-    };
+  const liItems = drinks.map(({ strDrink, idDrink }) => (
+    <li key={idDrink} className="option-list__item" data-id={idDrink}>
+      {strDrink}
+    </li>
+  ));
 
-    return (
-      <div className="option-list">
-        <p className="option-list__info">We found these options:</p>
-        <ol className="option-list__list" onClick={handleClick}>
-          {liItems}
-        </ol>
-      </div>
-    );
-  }
+  const handleClick = ({ target }) => {
+    const li = target.closest('li');
+    if (!li) return;
+    const drink = drinks.find(({ idDrink }) => idDrink === li.dataset.id);
+    setSelectedDrink(drink);
+  };
 
-  return null;
+  return (
+    <div className="option-list">
+      <p className="option-list__info">We found these options:</p>
+      <ol className="option-list__list" onClick={handleClick}>
+        {liItems}
+      </ol>
+    </div>
+  );
 }

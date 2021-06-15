@@ -9,9 +9,8 @@ export default function Results({ error }) {
   const [selectedDrink, setSelectedDrink] = useState(null);
 
   useEffect(() => {
-    if (drinks && drinks.length !== 0) {
-      setSelectedDrink(drinks[0]);
-    }
+    if (!drinks) return;
+    setSelectedDrink(drinks[0]);
   }, [drinks]);
 
   if (error) return <p className="message">{`Ops! ${error}`}</p>;

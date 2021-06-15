@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../context';
+import { isRandom } from '../utils';
 
 export default function ControlButtons({ setCurrentDrink }) {
   const { currentDrink } = useAppContext();
@@ -18,7 +19,7 @@ export default function ControlButtons({ setCurrentDrink }) {
         className="controls__input"
         type="text"
         placeholder="Bro, what is ...?"
-        value={/^random/.test(currentDrink) ? '' : currentDrink}
+        value={isRandom(currentDrink) ? '' : currentDrink}
         onChange={handleChange}
         spellCheck="false"
       />

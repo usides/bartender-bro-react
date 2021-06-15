@@ -5,37 +5,38 @@ import ControlButtons from './ControlButtons';
 import Results from './Results';
 import IngredientInfo from './IngredientInfo';
 
+const DEBOUNCE_SEARCH_TIMEOUT = 200;
+
 export default function App() {
   const [currentDrink, setCurrentDrink] = useState('');
   const [currentDrinkData, setCurrentDrinkData] = useState([]);
   const [error, setError] = useState(null);
   const [ingredient, setIngredient] = useState(null);
-  const [ingredientData, setIngredientData] = useState(null);
+  const [ingredientData, setIngredientData] = useState({});
 
   useEffect(() => {
-    if (currentDrink) {
+    if (!currentDrink) return;
+    const debounceTimerId = setTimeout(() => {
       loadDrinkData(currentDrink)
-        .then(data => {
-          const { drinks } = data;
+        .then(({ drinks }) => {
           setError(null);
           setCurrentDrinkData(drinks);
         })
         .catch(err => setError(err));
 
       setIngredient(null);
-    }
+    }, DEBOUNCE_SEARCH_TIMEOUT);
+    return () => clearTimeout(debounceTimerId);
   }, [currentDrink]);
 
   useEffect(() => {
-    if (ingredient) {
-      loadIngredientData(ingredient)
-        .then(data => {
-          const { ingredients } = data;
-          setError(null);
-          setIngredientData(ingredients[0]);
-        })
-        .catch(err => setError(err));
-    }
+    if (!ingredient) return;
+    loadIngredientData(ingredient)
+      .then(({ ingredients: [ingredients] }) => {
+        setError(null);
+        setIngredientData(ingredients);
+      })
+      .catch(err => setError(err));
   }, [ingredient]);
 
   return (
